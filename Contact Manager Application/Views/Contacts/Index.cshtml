@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Contact_Manager_Application.Models.Contact>
+
+@{
+    ViewData["Title"] = "Contact Manager Application";
+}
+
+<h1>Contacts</h1>
+
+<!-- Підключення JavaScript -->
+<script src="/js/tableFeatures.js"></script>
+<script src="/js/tableActions.js"></script>
+
+<!-- Форма для завантаження CSV -->
+<form asp-action="Upload" method="post" enctype="multipart/form-data" style="margin-bottom: 20px;">
+    <input type="file" name="file" />
+    <button type="submit" class="btn btn-secondary">Upload CSV</button>
+</form>
+
+<!-- Поля фільтрації -->
+<div style="margin-bottom: 10px;">
+    <input type="text" id="filterName" placeholder="Filter by name" onkeyup="filterTable()" />
+    <input type="text" id="filterAge" placeholder="Filter by age" onkeyup="filterTable()" />
+    <input type="text" id="filterPhone" placeholder="Filter by phone" onkeyup="filterTable()" />
+    <input type="text" id="filterSalary" placeholder="Filter by salary" onkeyup="filterTable()" />
+</div>
+
+<!-- Таблиця з даними -->
+<table id="contactsTable" class="table">
+    <thead>
+        <tr>
+            <th onclick="sortTable(0)" style="cursor: pointer;">@Html.DisplayNameFor(model => model.Name) <span class="sort-indicator"></span></th>
+            <th onclick="sortTable(1)" style="cursor: pointer;">@Html.DisplayNameFor(model => model.DateOfBirth) <span class="sort-indicator"></span></th>
+            <th onclick="sortTable(2)" style="cursor: pointer;">@Html.DisplayNameFor(model => model.Married) <span class="sort-indicator"></span></th>
+            <th onclick="sortTable(3)" style="cursor: pointer;">@Html.DisplayNameFor(model => model.Phone) <span class="sort-indicator"></span></th>
+            <th onclick="sortTable(4)" style="cursor: pointer;">@Html.DisplayNameFor(model => model.Salary) <span class="sort-indicator"></span></th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr data-id="@item.Id">
+                <td class="editable" data-field="Name">@Html.DisplayFor(modelItem => item.Name)</td>
+                <td class="editable" data-field="DateOfBirth">@Html.DisplayFor(modelItem => item.DateOfBirth)</td>
+                <td>
+                    <input type="checkbox" class="editable-checkbox" data-field="Married" @(item.Married ? "checked" : "") />
+                </td>
+                <td class="editable" data-field="Phone">@Html.DisplayFor(modelItem => item.Phone)</td>
+                <td class="editable" data-field="Salary">@Html.DisplayFor(modelItem => item.Salary)</td>
+                <td>
+                    <button class="delete-record btn btn-danger">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
